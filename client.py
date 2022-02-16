@@ -1,20 +1,22 @@
 import socket
 
-#create socket
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+class client:
 
-#connect to server address/port
-client.connect(('192.168.0.27', 62282))
-print('opened connection')
+    client = None
+    hostname = None
+    port = None
+    server_status_string = None
+    client_status_string = "client status"
 
-#send message
-client_message = "client message"
-client.send(str.encode(client_message))
+    def open_socket(self):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((self.hostname, int(self.port)))
 
-#receive response
-server_response = client.recv(4096)
-print(server_response.decode())
-
-#close connection
-client.close()
-print('closed connection')
+    def send_status(self):
+        print('sending')
+        self.client.send(self.client_status_string.encode())
+        print('receiving')
+        server_status = self.client.recv(1000).decode()
+        if server_status:
+            self.server_status_string = server_status
+        print('done')
