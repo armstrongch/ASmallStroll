@@ -55,7 +55,6 @@ def run_game():
 
 def handle_menu_output(output):
     global menu_instance, client_instance
-    print(output)
     if menu_instance.current_view == "join_prompt":
         if client_instance:
             if not client_instance.hostname:
@@ -64,7 +63,6 @@ def handle_menu_output(output):
                 client_instance.port = output
                 try:
                     client_instance.open_socket()
-                    print('opening thread')
                     threading.Thread(target=client_server_loop).start()
                     menu_instance.current_view = "successful_connect"
                 except:
@@ -73,18 +71,18 @@ def handle_menu_output(output):
                 
 
 def client_server_loop():
-    global server_intance
+    global server_intance, client_instance, menu_instance
 
     if server_instance:
         server_instance.set_conn()
         while True:
             server_instance.receive_message()
-            if server_instance.client_status_string:
-                print(server_instance.client_status_string)
+            if server_instance.client_status_string and menu_instance.current_view == "host":
+                    menu_instance.current_view = "successful_connect"
     elif client_instance:
         while True:
             client_instance.send_status()
-            print(client_instance.server_status_string)
+                
             
 setup_game()
 run_game()

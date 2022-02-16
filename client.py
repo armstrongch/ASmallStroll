@@ -13,10 +13,7 @@ class client:
         self.client.connect((self.hostname, int(self.port)))
 
     def send_status(self):
-        print('sending')
         self.client.send(self.client_status_string.encode())
-        print('receiving')
-        server_status = self.client.recv(1000).decode()
-        if server_status:
-            self.server_status_string = server_status
-        print('done')
+        new_server_status = self.client.recv(1000).decode()
+        if new_server_status:
+            self.server_status_string = new_server_status

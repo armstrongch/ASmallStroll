@@ -16,7 +16,7 @@ class menu:
                     self.current_view = "join_prompt"
         elif self.current_view == "join_prompt":
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     return_val = self.player_input
                     self.player_input = ""
                     return return_val
@@ -24,6 +24,15 @@ class menu:
                     self.player_input = self.player_input[:-1]
                 else:
                     self.player_input += event.unicode
+        elif self.current_view == "failed_connect":
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z:
+                    self.current_view = "main"
+        elif self.current_view == "successful_connect":
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z:
+                    self.current_view = "none"
+            
                         
 
     def draw(self, screen, server_instance, client_instance):
@@ -58,9 +67,14 @@ class menu:
 
         elif self.current_view == "successful_connect":
             display_text.append("Connected!")
+            display_text.append("Press Z to begin")
 
         elif self.current_view == "failed_connect":
             display_text.append("Failed!")
+            display_text.append("Press Z to return to the main menu")
+
+        elif self.current_view == "none":
+             display_text.append("TEST")
              
         for t in display_text:
             surface, rect = font.render(t)
